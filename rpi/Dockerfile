@@ -1,7 +1,12 @@
 FROM arm32v7/node:6
 
+COPY qemu-arm /usr/bin/qemu-arm-static
+
+mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc  
+echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register
+
 # add support for gpio library
-RUN apt-get update
+RUN /usr/bin/qemu-arm-static apt-get update
 RUN apt-get install python-rpi.gpio
 
 # Home directory for Node-RED application source code.
